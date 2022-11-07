@@ -95,5 +95,5 @@ newpassword(){
 cancel(){
 }
 
-esit(){
+exit(){
 }
