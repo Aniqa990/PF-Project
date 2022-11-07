@@ -85,3 +85,15 @@ for(i=0; i)
 record(){
 		
 	}
+
+reservation(){
+}
+
+newpassword(){
+}
+
+cancel(){
+}
+
+esit(){
+}
