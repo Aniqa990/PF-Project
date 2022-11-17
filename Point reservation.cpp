@@ -76,24 +76,52 @@ int main(){
 	return 0;
 }
 
-bus(){
+struct details{
+char route[100];
+char busdriver[100];
+int drivercontact;
+char seat[32][6];	
+};
+
+int buses[100];
+void bus(){
+int busno;
+int semester_fee=24000; 
 printf("Enter the bus number");
-scanf("%d", %busno);
-for(i=0; i)	
+scanf("%d", &busno);
+
+
+struct details buses[100];
+fptr= fopen("database.txt", "a+");
+printf("Enter the name of the bus driver: ");
+scanf(" %s", buses[busno-1].busdriver);
+printf("Enter the contact number of the driver: ");
+scanf(" %d", &buses[busno-1].drivercontact);
+printf("Enter the route of the bus (from:   to:  ): ");
+fflush(stdin);
+gets(buses[busno-1].route);
+fprintf(fptr,"\n\tBus number: %d\tSemester fee: %d\t\tBus Driver contact number: %d\t\tBus Driver: %s\t\tRoute: %s\n\n", busno, semester_fee, buses[busno-1].drivercontact, buses[busno-1].busdriver, buses[busno-1].route);
+
+int k=0;
+for(i=0; i<8;i++){
+           for(j=0;j<4;j++){
+char s2[6]="Empty";
+memcpy(buses[busno-1].seat, s2, strlen(s2));
+fprintf(fptr, "\t%d. %s\t", ++k, buses[busno-1].seat);
+}
+fprintf(fptr, "\n");}
+fclose(fptr);
+
+printf("Press any key to continue ... ");
+getch();
+
+
 }
 
-record(){
-		
-	}
-
-reservation(){
+void exit(){
+	system("cls");
+	printf("\n\t\t\tThank you for using the Point registration system!");
+	exit(0);
 }
 
-newpassword(){
-}
 
-cancel(){
-}
-
-exit(){
-}
