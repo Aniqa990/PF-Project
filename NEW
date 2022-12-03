@@ -1,0 +1,279 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+#include<conio.h>
+
+//same pointer for every file? Read a line from the file for seats, replace the seat name, print again in the file, but you gotta remove the whole thing from the start and print the bus details again.
+
+int choice,i,j,semester_fee=2400, number=0; //number is number of buses in system
+char user;//which user
+FILE *bptr;
+
+
+struct details{
+int bus_number;	
+char route[100];
+char busdriver[100];
+long int drivercontact;
+char seat[32][14];	
+};
+
+
+void login(struct details array[], int number);
+void bus(struct details array[], int number);//installing new bus
+void record(void);//displaying existing buses
+void newpassword(void);
+void reservation(void);
+void cancel(void);
+void quit(void);
+
+
+
+int main(){
+	
+	struct details array[number];
+	printf("Press 'a' for accessing admin options and 's' for accessing student/passenger options\n");
+	scanf(" %c", &user);
+	system("cls");
+	
+	switch(user){
+		case 'a':
+		case 'A':
+		login(array, number);
+		system("cls");
+		do{	
+		printf("Please press the corresponding number to select one of the following options:\n");
+		printf("1. Install new bus\n");
+		printf("2. View Bus Details\n");
+		printf("3. Update password\n");
+		printf("4. Exit\n");
+		scanf("%d", &choice);
+		system("cls");
+		
+		switch(choice){
+			case 1: bus(array, number);
+			break;
+			//case 2: record();
+		//	break;
+			case 4: quit();
+		}}while(choice!=4);
+		
+		
+		break;
+		
+	do{
+		case 's':
+		case 'S':
+		printf("Please press the corresponding number to select one of the following options:\n");
+		printf("1. View Bus Details\n");
+		printf("2. Seat Reservation\n");
+		printf("3. Cancel Booking\n");
+		printf("4. Exit\n");
+		scanf("%d", &choice);
+		system("cls");
+		
+	switch(choice){
+			//case 4: quit();
+			//break;
+			default: printf("Wrong option");
+				
+		}}while(choice!=4);
+		//more code detailing all options
+		
+		break;
+  }
+	
+	
+	return 0;
+}
+
+void login(struct details array[], int number){
+	system("cls");
+	char name[20]={0}, pass[20]={0}, sign_name[20]={0}, sign_pass[20]={0};
+	int result_name, result_pass, option, i=0;
+	FILE*fptr;
+	
+printf("\t\tSelect a number:\n");
+printf("\t\t 1. Register\n");
+printf("\t\t 2. Sign in\n");
+printf("Your choice: ");
+scanf("%d", &option);
+
+if(option==1){
+	fptr=fopen("Signin_details.txt", "w+");
+	printf("Username: ");
+	fflush(stdin);
+	fgets(name, 20, stdin);
+	printf("Password: ");
+	fflush(stdin);
+	fgets(pass, 20, stdin);
+	printf("You have successfully registered!");
+	fprintf(fptr, "%s\n%s", name, pass);
+	fclose(fptr);
+	
+	printf("\nPress any key to continue ... ");
+    getch();
+    
+    bus(array, number);
+    
+	
+}
+
+if(option==2){
+	fptr=fopen("Signin_details.txt", "r");
+	while(EOF=='\0') printf("\nPlease register yourself first\n");
+	printf("Username: ");
+	fflush(stdin);//refresh
+	fgets(sign_name, 20, stdin);
+	printf("Password: ");
+	fflush(stdin);
+	fgets(sign_pass, 20, stdin);
+
+	char line[20];
+	fgets(line, sizeof(line), fptr);
+			result_name=strcmp(sign_name, line);
+			fgets(line, sizeof(line), fptr);
+			result_pass=strcmp(sign_pass, line);
+	
+     if(result_name==0 && result_pass==0) printf("\nWelcome user %s!", name);
+	while(result_pass!=0 || result_name!=0){
+	printf("\nWrong login details. Please enter them again.\n\n");
+	printf("Username: ");
+	fflush(stdin);//refresh
+	fgets(sign_name, 20, stdin);
+	printf("Password: ");
+	fflush(stdin);
+	fgets(sign_pass, 20, stdin);
+
+	char line[20];
+	fgets(line, sizeof(line), fptr);
+			result_name=strcmp(sign_name, line);
+			fgets(line, sizeof(line), fptr);
+			result_pass=strcmp(sign_pass, line);
+}
+	getch();}
+fclose(fptr);
+}
+
+
+void bus(struct details array[], int number){
+
+int no;
+printf("Enter the number of buses you want to add: ");
+scanf("%d", &no);
+number+=no;
+int busno;
+FILE* fptr[no];
+char buffer[6];
+char string1[5],ch;
+char string2[5];
+
+for(int i=0; i<no; i++){
+printf("Enter the bus number: ");
+scanf("%d", &busno);
+sprintf(string1, "%d", busno);
+//bptr=fopen("buses.txt", "a+");
+
+
+for(int j=0; j<i; j++){
+	if(busno==array[j].bus_number){
+	while(busno==array[j].bus_number){
+		printf("Bus data already exists. Enter another bus number: ");
+		fflush(stdin);
+		scanf("%d", &busno);
+	}}
+}
+    fseek(bptr, 0, SEEK_SET); //sets pointer to beginning of file buses
+	while((ch=getc(bptr))!=EOF){
+		fgets(string2, 1, bptr);
+		while(strcmp(string1, string2)==0){
+			printf("Bus data already exists. Enter another bus number: ");
+			scanf("%d", &busno);
+			sprintf(string1, "%d", busno);			
+		}}
+		fprintf(bptr, "%d\n", busno);
+        fclose(bptr);
+	
+	
+        array[i].bus_number=busno;
+    	sprintf(buffer, "%d.txt", busno);
+    	fptr[i]=fopen(buffer, "w+");
+    	printf("Enter the bus driver's name: ");
+    	fflush(stdin);
+    	fgets(array[i].busdriver, 100, stdin);
+    	printf("Enter bus driver contact: ");
+    	scanf("%ld", &array[i].drivercontact);
+    	printf("Enter route of the bus: ");
+    	fflush(stdin);
+    	fgets(array[i].route, 100, stdin);
+
+fprintf(fptr[i],"Bus number: %d\tSemester fee: %d\t\tBus Driver contact number: %ld\t\tBus Driver: %s\t\tRoute: %s\n", busno, semester_fee, array[i].drivercontact, array[i].busdriver, array[i].route);
+
+
+
+
+/*for(int n=0; n<32;n++){
+char s2[6]="Empty";
+strcpy(array[i].seat[n], s2);}
+
+int l=0;
+for(int j=0; j<4; j++){
+	for(int k=0; k<8; k++){
+fprintf(fptr, "\t%d. %s\t", ++l, array[i].seat[l]);
+}
+fprintf(fptr, "\n");}*/
+
+fclose(fptr[i]);}
+
+printf("Press any key to continue ... ");
+getch();
+system("cls");
+
+
+}
+
+/*void record(){
+	char buffer[6];
+	char line[100];
+	for(int i=1; i<=number; i++){
+		sprintf(buffer, "%d.txt", i);
+		if((fptr= fopen(buffer, "r+"))!=NULL){
+	        fgets(line, sizeof(line), fptr);
+	        printf("%s\n\n", line);//why infinite loop?	
+			}
+}}
+
+void reservation(){
+	struct details array[number];
+	int num;
+	int seat_num;
+	char name[20];
+	//add record
+	printf("Choose the bus number you want to have a seat in: ");
+	scanf("%d", &num);
+	system("cls");
+	
+	char buffer[6];
+	sprintf(buffer, "%d.txt", num);
+	fptr= fopen(buffer, "r+");
+	for(i=3; i<=10; i++){  //from line 3 to line 10
+		char line[100];
+		fgets(line, sizeof(line), fptr);
+		printf("\t%s\n", line);
+	}
+	printf("Please enter the seat number you want: ");
+	scanf("%d", &seat_num);
+	printf("Please enter your name: ");
+	fflush(stdin);
+	gets(name);
+	memcpy(array[num].seat[seat_num], name, strlen(name));
+}
+*/
+
+ 
+void quit(void){
+	system("cls");
+	printf("\n\t\t\tThank you for using the Point registration system!");
+	exit(0);
+}
